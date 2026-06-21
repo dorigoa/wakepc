@@ -4,8 +4,6 @@ import paramiko
 import socket
 import os
 
-# --- Configuration (Place sensitive data here, ideally using environment variables) ---
-# Note: In a real application, credentials should be managed securely (e.g., vault, .env file)
 REMOTE_HOST = "ubuntu"
 REMOTE_USER = "alvise"
 SSH_KEY_PATH = os.path.expanduser("~/.ssh/id_rsa") # Adjust path if necessary
@@ -89,14 +87,14 @@ def main():
         st.session_state['confirm_poweroff'] = True
 
     if st.session_state.get('confirm_poweroff'):
-        st.warning(f"Sei sicuro di voler spegnere `{REMOTE_HOST}`?")
+        st.warning(f"Are you sure you want to switch off `{REMOTE_HOST}`?")
         col1, col2 = st.columns(2)
         if col1.button("Conferma spegnimento", type="primary"):
             st.session_state.pop('confirm_poweroff', None)
             result = execute_poweroff_pc()
             st.session_state['last_action'] = f"PowerOFF PC Result: {result}"
             st.rerun()
-        if col2.button("Annulla"):
+        if col2.button("Cancel"):
             st.session_state.pop('confirm_poweroff', None)
             st.rerun()
 

@@ -1,2 +1,2 @@
-streamlit
-paramiko
+pip install streamlit paramiko
+brew install wakeonlan

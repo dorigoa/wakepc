@@ -1,12 +1,14 @@
 import streamlit as st
 import subprocess
 import paramiko
+import config
 import socket
 import os
 
-REMOTE_HOST = "ubuntu"
-REMOTE_USER = "alvise"
-SSH_KEY_PATH = os.path.expanduser("~/.ssh/id_rsa") # Adjust path if necessary
+REMOTE_HOST = config.REMOTE_SSH_HOST
+REMOTE_USER = config.REMOTE_USER
+SSH_KEY_PATH = config.SSH_KEY_PATH #os.path.expanduser("~/.ssh/id_rsa") # Adjust path if necessary
+REMOTE_PING_HOST = config.REMOTE_PING_HOST
 
 def resolve_host(hostname):
     """Resolve hostname, falling back to hostname.local for mDNS (macOS)."""
@@ -89,7 +91,7 @@ def main():
     if st.session_state.get('confirm_poweroff'):
         st.warning(f"Are you sure you want to switch off `{REMOTE_HOST}`?")
         col1, col2 = st.columns(2)
-        if col1.button("Conferma spegnimento", type="primary"):
+        if col1.button("Confirm poweroff", type="primary"):
             st.session_state.pop('confirm_poweroff', None)
             result = execute_poweroff_pc()
             st.session_state['last_action'] = f"PowerOFF PC Result: {result}"

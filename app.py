@@ -13,14 +13,6 @@ REMOTE_PING_HOST = config.REMOTE_PING_HOST
 BROADCAST_IP     = config.BROADCAST_IP
 MACADDR          = config.MACADDR
 
-#_________________________________________________________________________________
-# def resolve_host(hostname):
-#     """Resolve hostname, falling back to hostname.local for mDNS (macOS)."""
-#     try:
-#         socket.getaddrinfo(hostname, None)
-#         return hostname
-#     except socket.gaierror:
-#         return f"{hostname}.local"
 
 #_________________________________________________________________________________
 def ssh_host( ) -> bool:
@@ -28,16 +20,12 @@ def ssh_host( ) -> bool:
     client.load_system_host_keys()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        #host = resolve_host(REMOTE_HOST)
         with st.spinner(f"Connecting to {REMOTE_USER}@{REMOTE_HOST} and to check host can execute commands..."):
             client.connect(REMOTE_HOST, username=REMOTE_USER, key_filename=SSH_KEY_PATH, timeout=10)
 
             stdin, stdout, stderr = client.exec_command("hostname -s")
 
             exit_status = stdout.channel.recv_exit_status()
-
-            # output = stdout.read().decode().strip()
-            # error = stderr.read().decode().strip()
 
             if exit_status == 0:
                 return True
@@ -72,7 +60,7 @@ def ping_host() -> bool:
 #_________________________________________________________________________________
 def execute_wake_pc() -> str:
     """Executes the local Wake PC command."""
-    command = f"wakeonlan -i {BROADCAST_IP} {MACADDR}"
+    command = f"/opt/homebrew/bin/wakeonlan -i {BROADCAST_IP} {MACADDR}"
     try:
         with st.spinner(f"Sending wake-up signal via: {command}"):
             # Using run with check=True to raise an error if the command fails

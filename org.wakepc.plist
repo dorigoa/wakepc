@@ -16,15 +16,15 @@
 	</array>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Volumes/Home/dorigo_a/miniforge3/bin/streamlit</string>
+		<string>/Volumes/Home/alvise/miniforge3/bin/streamlit</string>
 		<string>run</string>
-		<string>/Volumes/Home/dorigo_a/wakepc/app.py</string>
+		<string>/Volumes/Home/alvise/GIT/wakepc/app.py</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
 	<key>StandardErrorPath</key>
-	<string>/Volumes/Home/dorigo_a/wakepc.log</string>
+	<string>/var/log/wakepc.log</string>
 	<key>StandardOutPath</key>
-	<string>/Volumes/Home/dorigo_a/wakepc.log</string>
+	<string>/var/log/wakepc.log</string>
 </dict>
 </plist>

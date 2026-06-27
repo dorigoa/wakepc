@@ -10,31 +10,11 @@
 			<true/>
 		</dict>
 	</dict>
-	<key>EnvironmentVariables</key>
-	<dict>
-		<key>HOME</key>
-		<string>/Volumes/Home/alvise</string>
-		<key>PATH</key>
-		<string>/Volumes/Home/alvise/miniforge3/envs/tools/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-	</dict>
 	<key>Label</key>
 	<string>org.wakepc</string>
-	<!-- <key>LimitLoadToSessionType</key>
-	<array>
-		<string>Aqua</string>
-		<string>Background</string>
-		<string>LoginWindow</string>
-		<string>StandardIO</string>
-		<string>System</string>
-	</array> -->
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Volumes/Home/alvise/miniforge3/envs/tools/bin/streamlit</string>
-		<string>run</string>
-		<string>--server.headless=true</string>
-		<string>--server.address=0.0.0.0</string>
-		<string>--browser.gatherUsageStats=false</string>
-		<string>/Volumes/Home/alvise/GIT/wakepc/app.py</string>
+		<string>/usr/local/bin/wakepc-launch.sh</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>

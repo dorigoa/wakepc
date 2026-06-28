@@ -1,3 +1,11 @@
+#
+# sudo cp wakepc.service /etc/systemd/system/wakepc.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable --now wakepc.service
+# systemctl status wakepc.service
+# journalctl -u wakepc.service -f
+#
+
 [Unit]
 Description=Streamlit WakePC app
 After=network-online.target

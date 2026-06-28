@@ -8,11 +8,13 @@ import os
 
 REMOTE_HOST      = config.REMOTE_SSH_HOST
 REMOTE_USER      = config.REMOTE_USER
-SSH_KEY_PATH     = config.SSH_KEY_PATH #os.path.expanduser("~/.ssh/id_rsa") # Adjust path if necessary
+SSH_KEY_PATH     = config.SSH_KEY_PATH
 REMOTE_PING_HOST = config.REMOTE_PING_HOST
 BROADCAST_IP     = config.BROADCAST_IP
 MACADDR          = config.MACADDR
-
+WAKEONLAN        = config.WAKEONLAN
+PING             = config.PING
+SSH              = config.SSH
 
 #_________________________________________________________________________________
 def ssh_host( ) -> bool:
@@ -48,7 +50,7 @@ def ping_host() -> bool:
         # -c 1: send 1 packet
         # -W 1: wait 1 second for a response
         result = subprocess.run(
-            ["ping", "-c", "1", "-W", "1", REMOTE_PING_HOST],
+            [f"{PING}", "-c", "1", "-W", "1", REMOTE_PING_HOST],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=False
@@ -60,7 +62,7 @@ def ping_host() -> bool:
 #_________________________________________________________________________________
 def execute_wake_pc() -> str:
     """Executes the local Wake PC command."""
-    command = f"/opt/homebrew/bin/wakeonlan -i {BROADCAST_IP} {MACADDR}"
+    command = f"{WAKEONLAN} -i {BROADCAST_IP} {MACADDR}"
     try:
         with st.spinner(f"Sending wake-up signal via: {command}"):
             # Using run with check=True to raise an error if the command fails
@@ -85,11 +87,11 @@ def execute_poweroff_pc() -> bool:
     # client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     remote_cmd = (
-        f"sudo poweroff"
+        f"/usr/bin/sudo /usr/sbin/poweroff"
     )
     print(f"  SSH: {REMOTE_USER}@{REMOTE_HOST} \"{remote_cmd}\"", file=sys.stderr)
     result = subprocess.run(
-        ["ssh", "-o", "BatchMode=yes", f"{REMOTE_USER}@{REMOTE_HOST}", remote_cmd],
+        [f"{SSH}", "-o", "BatchMode=yes", f"{REMOTE_USER}@{REMOTE_HOST}", remote_cmd],
         capture_output=True,
         text=True,
         timeout=15,
@@ -99,40 +101,12 @@ def execute_poweroff_pc() -> bool:
         return False
     return True
 
-    # try:
-    #     # host = resolve_host(REMOTE_HOST)
-    #     with st.spinner(f"Connecting to {REMOTE_USER}@{REMOTE_HOST} and shutting down PC..."):
-    #         #print(f"Connecting to {REMOTE_USER}@{REMOTE_HOST} and shutting down PC...")
-            #client.connect(REMOTE_HOST, username=REMOTE_USER, key_filename=SSH_KEY_PATH, timeout=10)
-
-    #         stdin, stdout, stderr = client.exec_command("sudo poweroff")
-
-    #         exit_status = stdout.channel.recv_exit_status()
-
-    #         output = stdout.read().decode().strip()
-    #         error = stderr.read().decode().strip()
-
-    #         if exit_status == 0:
-    #             return f"Success! PowerOFF command sent to {REMOTE_HOST}. Output: {output}"
-    #         else:
-    #             return f"PowerOFF command failed (Exit Code {exit_status}). Stderr: {error}"
-
-    # except paramiko.AuthenticationException:
-    #     return "Authentication failed. Please check the SSH key path and permissions."
-    # except paramiko.SSHException as e:
-    #     return f"Could not establish SSH connection or command failed: {e}"
-    # except Exception as e:
-    #     return f"An unexpected error occurred: {e}"
-    # finally:
-    #     client.close()
-
 #_________________________________________________________________________________
 @st.fragment(run_every=5)
 def show_remote_host_status():
     """Display the ping status of the remote host in the sidebar."""
     current_online = ping_host() and ssh_host()
-    #current_ssh = 
-
+    
     # Check if status changed to trigger a full rerun for the whole app (to enable/disable buttons)
     if 'is_online' in st.session_state and st.session_state['is_online'] is not None and st.session_state['is_online'] != current_online:
         st.session_state['is_online'] = current_online
